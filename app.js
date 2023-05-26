@@ -7,6 +7,10 @@ const path = require("path");
 // require model
 const Campground = require("./models/campground");
 
+// require cities then seedHelpers
+const cities = require("./seeds/cities");
+const { descriptors, places } = require("./seeds/seedHelpers");
+
 // mongoose
 const mongoose = require("mongoose");
 
@@ -22,18 +26,25 @@ db.once("open", () => {
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// uses
+app.use(express.urlencoded({ extended: true }));
+
 // routes
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("campgrounds/home");
 });
 
-app.get("/makecampground", async (req, res) => {
-  const camp = new Campground({
-    title: "My Backyard",
-    description: "Cheap Camping",
-  });
-  await camp.save();
-  res.send("camp");
+// index
+app.get("/campgrounds", async (req, res) => {
+  const campgrounds = await Campground.find({});
+  res.render("campgrounds/index", { campgrounds });
+});
+
+// show
+app.get("/campgrounds/:id", async (req, res) => {
+  const { id } = req.params;
+  const campground = await Campground.findById(id);
+  res.render("campgrounds/show", { campground });
 });
 
 app.listen(port, () => {

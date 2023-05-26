@@ -16,6 +16,7 @@ db.once("open", () => {
 });
 
 // pick random item from the array (seedHelpers)
+// array[Math.floor(Math.random() * array.length)];
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
