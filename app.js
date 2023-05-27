@@ -7,6 +7,9 @@ const path = require("path");
 // require model
 const Campground = require("./models/campground");
 
+// require method-override
+const methodOverride = require("method-override");
+
 // require cities then seedHelpers
 const cities = require("./seeds/cities");
 const { descriptors, places } = require("./seeds/seedHelpers");
@@ -28,6 +31,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // uses
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 // routes
 app.get("/", (req, res) => {
@@ -52,6 +56,24 @@ app.post("/campgrounds", async (req, res) => {
   const campground = new Campground(req.body.campground);
   await campground.save();
   res.redirect(`/campgrounds/${campground._id}`);
+});
+
+// edit&update
+
+// edit
+app.get("/campgrounds/:id/edit", async (req, res) => {
+  const campground = await Campground.findById(req.params.id);
+  res.render("campgrounds/edit", { campground });
+});
+
+// update
+app.patch("/campgrounds/:id", async (req, res) => {
+  const campground = await Campground.findByIdAndUpdate(
+    req.params.id,
+    req.body.campground,
+    { runValidators: true, new: true }
+  );
+  res.redirect(`/campgrounds`);
 });
 
 // show
