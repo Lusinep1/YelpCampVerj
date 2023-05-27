@@ -67,13 +67,11 @@ app.get("/campgrounds/:id/edit", async (req, res) => {
 });
 
 // update
-app.patch("/campgrounds/:id", async (req, res) => {
-  const campground = await Campground.findByIdAndUpdate(
-    req.params.id,
-    req.body.campground,
-    { runValidators: true, new: true }
-  );
-  res.redirect(`/campgrounds`);
+app.put("/campgrounds/:id", async (req, res) => {
+  const campground = await Campground.findByIdAndUpdate(req.params.id, {
+    ...req.body.campground,
+  });
+  res.redirect(`/campgrounds/${campground._id}`);
 });
 
 // show
@@ -82,6 +80,13 @@ app.get("/campgrounds/:id", async (req, res) => {
   const campground = await Campground.findById(id);
   //kam const campground = await Campground.findById(req.params.id);
   res.render("campgrounds/show", { campground });
+});
+
+// delete
+app.delete("/campgrounds/:id", async (req, res) => {
+  const { id } = req.params;
+  await Campground.findByIdAndDelete(id);
+  res.redirect("/campgrounds");
 });
 
 app.listen(port, () => {

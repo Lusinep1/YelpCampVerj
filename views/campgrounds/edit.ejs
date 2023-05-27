@@ -8,10 +8,7 @@
   </head>
   <body>
     <h1>Form to edit <%= campground.title %></h1>
-    <form
-      action="/campgrounds/<%= campground._id %>?_method=PATCH"
-      method="post"
-    >
+    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post">
       <div>
         <label for="title">Title</label>
         <input
@@ -19,6 +16,7 @@
           name="campground[title]"
           id="title"
           placeholder="Change Title"
+          value="<%= campground.title %>"
         />
       </div>
       <div>
@@ -29,10 +27,14 @@
           name="campground[location]"
           placeholder="Change City, State"
           id="location"
+          value="<%= campground.location %>"
         />
       </div>
       <br />
       <button>Submit</button>
     </form>
+    <footer>
+      <a href="/campgrounds/<%= campground._id %>">Cancel</a>
+    </footer>
   </body>
 </html>
