@@ -1,40 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Campground</title>
-  </head>
-  <body>
-    <h1>Form to edit <%= campground.title %></h1>
-    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post">
-      <div>
-        <label for="title">Title</label>
-        <input
-          type="text"
-          name="campground[title]"
-          id="title"
-          placeholder="Change Title"
-          value="<%= campground.title %>"
-        />
-      </div>
-      <div>
-        <br />
-        <label for="location">Add City & State</label>
-        <input
-          type="text"
-          name="campground[location]"
-          placeholder="Change City, State"
-          id="location"
-          value="<%= campground.location %>"
-        />
-      </div>
-      <br />
-      <button>Submit</button>
-    </form>
-    <footer>
-      <a href="/campgrounds/<%= campground._id %>">Cancel</a>
-    </footer>
-  </body>
-</html>
+<% layout('layouts/boilerplate') %>
+
+<h1>Form to edit <%= campground.title %></h1>
+<form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post">
+  <div>
+    <label for="title">Title</label>
+    <input
+      type="text"
+      name="campground[title]"
+      id="title"
+      placeholder="Change Title"
+      value="<%= campground.title %>"
+    />
+  </div>
+  <div>
+    <br />
+    <label for="location">Add City & State</label>
+    <input
+      type="text"
+      name="campground[location]"
+      placeholder="Change City, State"
+      id="location"
+      value="<%= campground.location %>"
+    />
+  </div>
+  <br />
+  <button>Submit</button>
+</form>
+<footer>
+  <a href="/campgrounds/<%= campground._id %>">Cancel</a>
+</footer>

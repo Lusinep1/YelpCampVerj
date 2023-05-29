@@ -10,6 +10,9 @@ const Campground = require("./models/campground");
 // require method-override
 const methodOverride = require("method-override");
 
+// require ejs-mate
+const ejsMate = require("ejs-mate");
+
 // require cities then seedHelpers
 const cities = require("./seeds/cities");
 const { descriptors, places } = require("./seeds/seedHelpers");
@@ -28,6 +31,7 @@ db.once("open", () => {
 // setter
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.engine("ejs", ejsMate);
 
 // uses
 app.use(express.urlencoded({ extended: true }));
