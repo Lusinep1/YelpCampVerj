@@ -4,7 +4,7 @@
 <div class="row">
   <h1 class="text-center">Form to create new campground</h1>
   <div class="col-6-offset-3">
-    <form action="/campgrounds" method="post">
+    <form action="/campgrounds" method="post" novalidate class="validated-form">
       <div>
         <label for="title" class="form-label">Title</label>
         <input
@@ -13,8 +13,11 @@
           name="campground[title]"
           id="title"
           placeholder="Add Title"
+          required
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
+
       <div class="mb-3">
         <br />
         <label for="location" class="form-label">Add City & State</label>
@@ -24,7 +27,9 @@
           name="campground[location]"
           placeholder="Add City, State"
           id="location"
+          required
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label for="image" class="form-label">Image Url</label>
@@ -34,7 +39,9 @@
           name="campground[image]"
           placeholder="Add Image Url"
           id="image"
+          required
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label for="price" class="form-label">Enter Price</label>
@@ -48,7 +55,9 @@
             aria-describedby="price-label"
             id="price"
             name="campground[price]"
+            required
           />
+          <div class="valid-feedback">Looks good!</div>
         </div>
       </div>
       <div class="mb-3">
@@ -59,8 +68,9 @@
           name="campground[description]"
           placeholder="Add Description"
           id="description"
-        >
-        </textarea>
+          required
+        ></textarea>
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <button class="btn btn-success">Add Campground</button>
@@ -71,3 +81,29 @@
 <footer>
   <a href="/campgrounds">Back to Index</a>
 </footer>
+
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll(".validated-form");
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+</script>
