@@ -120,13 +120,14 @@ app.delete(
 
 // to add statuscode and message for wrond url
 app.all("*", (req, res, next) => {
-  next(new ExpressError(404, "Page Not FOUND"));
+  next(new ExpressError(404, "Page Not Found, 404"));
 });
 
 // basic error handler
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = "app.use-i error. oh boi" } = err;
-  res.status(statusCode).send(message);
+  const { statusCode = 500 } = err;
+  if (!err.message) err.messgae = "app.use error";
+  res.status(statusCode).render("error.ejs", { err });
 });
 
 // Postmanov krnas orinak taza campground stexces u kstexcvi
