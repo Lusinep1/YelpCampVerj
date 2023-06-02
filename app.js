@@ -4,6 +4,9 @@ const app = express();
 const port = 3000;
 const path = require("path");
 
+// require joi
+const Joi = require("joi");
+
 // require model
 const Campground = require("./models/campground");
 
@@ -66,9 +69,24 @@ app.get("/campgrounds/new", (req, res) => {
 app.post(
   "/campgrounds",
   catchAsync(async (req, res, next) => {
-    if (!req.body.campground)
-      throw new ExpressError(400, "Invalid Campground Data");
+    // if (!req.body.campground)
+    // throw new ExpressError(400, "Invalid Campground Data");
     //above: so that you can't add new campground through Postman:
+    const campgroundSchema = Joi.object({
+      campground: Joi.object({
+        title: Joi.string().required(),
+        price: Joi.number().required().min(0),
+        image: Joi.string().required(),
+        location: Joi.string().required(),
+        description: Joi.string().required(),
+      }).required(),
+    });
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+      const msg = error.details.map((el) => el.message).join(",");
+      throw new ExpressError(400, msg);
+    }
+    console.log(result);
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
