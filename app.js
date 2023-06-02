@@ -66,6 +66,9 @@ app.get("/campgrounds/new", (req, res) => {
 app.post(
   "/campgrounds",
   catchAsync(async (req, res, next) => {
+    if (!req.body.campground)
+      throw new ExpressError(400, "Invalid Campground Data");
+    //above: so that you can't add new campground through Postman:
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
@@ -115,11 +118,18 @@ app.delete(
   })
 );
 
+// to add statuscode and message for wrond url
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page Not FOUND"));
+});
+
 // basic error handler
 app.use((err, req, res, next) => {
-  // const {status=500, message=''} = err;
-  res.send("Oh boi!, somthing went wrong");
+  const { statusCode = 500, message = "app.use-i error. oh boi" } = err;
+  res.status(statusCode).send(message);
 });
+
+// Postmanov krnas orinak taza campground stexces u kstexcvi
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
