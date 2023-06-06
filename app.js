@@ -4,8 +4,9 @@ const app = express();
 const port = 3000;
 const path = require("path");
 
-// require model
+// require models
 const Campground = require("./models/campground");
+const Review = require("./models/review");
 
 // require error handling routes
 const ExpressError = require("./utils/ExpressError");
@@ -135,7 +136,20 @@ app.delete(
   })
 );
 
-// to add statuscode and message for wrond url
+// Review route
+app.post(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res) => {
+    const camp = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    camp.reviews.push(review);
+    await review.save();
+    await camp.save();
+    res.redirect(`/campgrounds/${camp._id}`);
+  })
+);
+
+// to add statuscode and message for wrong url
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found, 404"));
 });
