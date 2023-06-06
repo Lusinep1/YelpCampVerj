@@ -23,7 +23,7 @@ const cities = require("./seeds/cities");
 const { descriptors, places } = require("./seeds/seedHelpers");
 
 // reauire schemas
-const { campgroundSchema } = require("./schemas.js");
+const { campgroundSchema, reviewSchema } = require("./schemas.js");
 
 // mongoose
 const mongoose = require("mongoose");
@@ -47,6 +47,17 @@ app.use(methodOverride("_method"));
 
 // defining middleware function for Joi
 const vallidateCampgound = (req, res, next) => {
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, msg);
+  } else {
+    next();
+  }
+};
+
+// defining middleware function for Joi for reviewSchema to Validate
+const validateReview = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
