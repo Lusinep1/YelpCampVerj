@@ -161,6 +161,17 @@ app.post(
   })
 );
 
+// Delete Review
+app.delete(
+  "/campgrounds/:id/reviews/:reviewId",
+  catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Campground.findByIdAndUpdate(id, { $pull: { review: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
+  })
+);
+
 // to add statuscode and message for wrong url
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found, 404"));
