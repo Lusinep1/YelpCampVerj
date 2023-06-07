@@ -58,7 +58,7 @@ const vallidateCampgound = (req, res, next) => {
 
 // defining middleware function for Joi for reviewSchema to Validate
 const validateReview = (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body);
+  const { error } = reviewSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(400, msg);
@@ -131,7 +131,7 @@ app.get(
   "/campgrounds/:id",
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id);
+    const campground = await Campground.findById(id).populate("reviews");
     //kam const campground = await Campground.findById(req.params.id);
     res.render("campgrounds/show", { campground });
   })
@@ -150,6 +150,7 @@ app.delete(
 // Review route
 app.post(
   "/campgrounds/:id/reviews",
+  validateReview,
   catchAsync(async (req, res) => {
     const camp = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
